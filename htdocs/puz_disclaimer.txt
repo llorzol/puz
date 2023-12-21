@@ -1,0 +1,15 @@
+<p>
+ Users are cautioned to consider the nature of the information presented here 
+ before making decisions using it that concern personal or public safety or 
+ the conduct of business that involves substantial monetary or operational 
+ consequences. Information concerning the accuracy and appropriate uses of 
+ this information or other hydrologic data may be obtained from the report 
+ (Snyder, 2009) or the author, whose name is shown as the contact, or from 
+ the USGS groundwater specialist in Oregon. 
+</p>
+<p>
+  <a href="http://pubs.usgs.gov/sir/2008/5059/" target="_blank"> Snyder, D.T., 2009, 
+  Estimated depth to groundwater and configuration of the water table in the Portland, 
+   Oregon area: U.S. Geological Survey Scientific Investigations Report 2008-5059, 40 p. 
+   (Available at http://pubs.usgs.gov/sir/2008/5059/)</a>
+</p>

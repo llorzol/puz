@@ -1,0 +1,31 @@
+{
+    "title"          : "Estimated Depth to Ground Water and Configuration of the Water Table in the Portland, Oregon Area",
+    "home_link"      : "http://pubs.usgs.gov/sir/2008/5059/",
+    "rasters"        : [ "tiffs/lsd.tif", "tiffs/dtw.tif", "tiffs/wtele.tif", "tiffs/uncer.tif" ],
+    "color_file"     : "framework_color_map.txt",
+    "raster_projection"    : "+title=epsg_2610 +proj=utm +zone=10 +ellps=GRS80 +datum=NAD83 +units=m +no_defs",
+    "latlong_projection"    : "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs", 
+  "northwest_x"   :       489526,
+  "northwest_y"   :      5094053,
+  "northeast_x"   :       573297,
+  "northeast_y"   :      5094053,
+  "southeast_x"   :       573297,
+  "southeast_y"   :      5011578,
+  "southwest_x"   :       489526,
+  "southwest_y"   :      5011578,
+   "zoom_level"    : 9,
+    "noDataValue"   :  -32768,
+    "xy_multiplier" :           1.0,
+    "xy_units"      :      "meters",
+    "z_multiplier"  :            1.0,
+    "z_units"       :      "feet",
+    "graph_x_axis"  : "Distance, in feet",
+    "graph_y_axis"  : "Elevation above NAVD 1988, in feet",
+    "aboutFiles"    : {
+                     "welcome_text"              : "puz_welcome.txt",
+                     "cooperators_list"          : "puz_cooperators.txt",
+                     "general_instructions_text" : "puz_general_instructions.txt",
+                     "disclaimer_text"           : "puz_disclaimer.txt",
+                     "contacts_text"             : "puz_contacts.txt"
+                    }
+}

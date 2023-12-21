@@ -1,0 +1,18 @@
+ <p> 
+  Prepared in cooperation with:
+ </p>
+ <p> 
+  <img class="images" height="60" width="107" src="images/Portland_BES_logo.jpg"></img>the City of Portland, 
+ </p>
+ <p> 
+  <img class="images" height="61" width="61" src="images/Gresham_logo.jpg"></img>the City of Gresham, 
+ </p>
+ <p> 
+  <img class="images" height="61" width="73" src="images/clackamas_logo.gif"></img>Clackamas County's Water Environment Services,
+ </p>
+ <p> 
+  <img class="images" height="70" width="69" src="images/multco_logo_cropped.jpg"></img>Multnomah County, and
+ </p>
+ <p> 
+  <img class="images" height="60" width="107" src="images/DHS_logo.jpg">the Oregon Department of Human Services under the Drinking Water Program
+ </p>

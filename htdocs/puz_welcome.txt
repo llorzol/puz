@@ -1,0 +1,36 @@
+   <p>
+   The map provides access to estimates of depth-to-water and water-table elevation for the 
+   Portland, Oregon, metropolitan area, along with estimates of their relative uncertainty that were 
+   developed by <a href="http://pubs.usgs.gov/sir/2008/5059/" target="_blank">Snyder (2009)</a>. The method 
+   of analysis used to determine the water-table configuration relied on water-level data from shallow 
+   wells and surface-water features that are representative of the water table. The water-table 
+   configuration maps generally are representative of the average conditions in the study area; 
+   however, the actual position of the water table may differ from the estimated position at specific 
+   locations, and short-term, seasonal, and long-term variations in the differences can be expected 
+   (see Disclaimer). The values reported here represent the average water-table position for a 
+   250-foot-square area (as represented by the interpolation grid). Site-specific estimates of the 
+   water-table position in areas of steep land-surface relief, steep water-table gradients, abrupt 
+   local change in hydrogeologic properties, or strong stresses to the groundwater system such as 
+   focused recharge or pumping, may result in water-table positions that deviate from the average.
+   </p>
+   <p>
+   Each estimate of the water-table position has an associated uncertainty. The relative uncertainty 
+   map provides a measure of the relative uncertainty associated with the estimates of the water-table 
+   position at any location. The values of the relative uncertainty range from 0 to 1, where 0 
+   represents a low relative uncertainty and 1 represents a high relative uncertainty. These values 
+   provide a method to compare and evaluate the reliability associated with the values of the 
+   water-table position. The relative uncertainty map addresses some but not all possible errors 
+   associated with the analysis of the water-table configuration and does not depict all sources of 
+   uncertainty. In particular, perched groundwater zones may be present in some areas resulting in 
+   the actual depth to water being less than estimated using the results of this study.
+   </p>
+   <p>
+   Additional information on the sources and description of data, study methods, estimates and 
+   information on seasonal water-table fluctuations, and contour maps of the depth to water, 
+   water-table elevation, and relative uncertainty, for the Portland, Oregon metropolitan area can 
+   be found in the associated report, <a href="http://pubs.usgs.gov/sir/2008/5059/" target="_blank">"Estimated Depth to Ground Water and Configuration of the Water 
+   Table in the Portland, Oregon Area."</a>
+   </p>
+   <p>
+   Elevation is referenced to sea level using the North American Vertical Datum of 1988 (NAVD 88).
+   </p>
