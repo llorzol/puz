@@ -1,0 +1,88 @@
+
+Build zip file
+---------------------------------------------------------------------------------
+zip -r puz.zip htdocs/index.html htdocs/puz_* htdocs/javascripts htdocs/css htdocs/kmls htdocs/images htdocs/DrupalVisID
+
+
+zip -r puz.zip cgi-bin/framework_location.pl cgi-bin/framework_location.py cgi-bin/frameworkUtils.py
+
+
+
+List
+---------------------------------------------------------------------------------
+zip -sf puz.zip
+Archive contains:
+  htdocs/index.html
+  htdocs/puz_configuration.js
+  htdocs/puz_contacts.txt
+  htdocs/puz_cooperators.txt
+  htdocs/puz_disclaimer.txt
+  htdocs/puz_general_instructions.txt
+  htdocs/puz_welcome.txt
+  htdocs/javascripts/
+  htdocs/javascripts/required/
+  htdocs/javascripts/required/bootstrap.bundle.min.js
+  htdocs/javascripts/required/Control.MiniMap.min.js
+  htdocs/javascripts/required/easy-button.js
+  htdocs/javascripts/required/esri-leaflet-core.js
+  htdocs/javascripts/required/esri-leaflet-geocoder.js
+  htdocs/javascripts/required/jquery.min.js
+  htdocs/javascripts/required/jquery.url.js
+  htdocs/javascripts/required/L.Control.Locate.min.js
+  htdocs/javascripts/required/leaflet.min.js
+  htdocs/javascripts/required/leaflet.zoomhome.min.js
+  htdocs/javascripts/required/popper.min.js
+  htdocs/javascripts/required/proj4js/
+  htdocs/javascripts/required/proj4js/dist/
+  htdocs/javascripts/required/proj4js/dist/proj4.js
+  htdocs/javascripts/required/tether.min.js
+  htdocs/javascripts/usgs/
+  htdocs/javascripts/usgs/baseMaps.js
+  htdocs/javascripts/usgs/dialog.js
+  htdocs/javascripts/usgs/framework_tools.js
+  htdocs/javascripts/usgs/KML.js
+  htdocs/javascripts/usgs/map.js
+  htdocs/javascripts/usgs/map_coordinate.js
+  htdocs/javascripts/usgs/popup.js
+  htdocs/javascripts/usgs/webRequest.js
+  htdocs/css/
+  htdocs/css/required/
+  htdocs/css/required/bootstrap-icons.css
+  htdocs/css/required/bootstrap.min.css
+  htdocs/css/required/easy-button.css
+  htdocs/css/required/esri-leaflet-geocoder.css
+  htdocs/css/required/font-awesome.min.css
+  htdocs/css/required/L.Control.Locate.css
+  htdocs/css/required/leaflet.css
+  htdocs/css/required/leaflet.zoomhome.css
+  htdocs/css/usgs/
+  htdocs/css/usgs/map.css
+  htdocs/css/usgs/popup.css
+  htdocs/css/usgs/usgs.css
+  htdocs/kmls/
+  htdocs/kmls/extent_dd.kml
+  htdocs/images/
+  htdocs/images/ajax-loader.gif
+  htdocs/images/clackamas_logo.gif
+  htdocs/images/DHS_logo.jpg
+  htdocs/images/Gresham_logo.jpg
+  htdocs/images/multco_logo_cropped.jpg
+  htdocs/images/Portland_BES_logo.jpg
+  htdocs/DrupalVisID/
+  htdocs/DrupalVisID/fonts/
+  htdocs/DrupalVisID/fonts/fontawesome-webfont.eot
+  htdocs/DrupalVisID/fonts/fontawesome-webfont.svg
+  htdocs/DrupalVisID/fonts/fontawesome-webfont.ttf
+  htdocs/DrupalVisID/fonts/fontawesome-webfont.woff
+  htdocs/DrupalVisID/fonts/fontawesome-webfont.woff2
+  htdocs/DrupalVisID/fonts/FontAwesome.otf
+  htdocs/DrupalVisID/images/
+  htdocs/DrupalVisID/images/logo.png
+  htdocs/DrupalVisID/stylesheets/
+  htdocs/DrupalVisID/stylesheets/common.css
+  htdocs/DrupalVisID/stylesheets/custom.css
+  cgi-bin/framework_location.pl
+  cgi-bin/framework_location.py
+  cgi-bin/frameworkUtils.py
+Total 72 entries (2627531 bytes)
+
