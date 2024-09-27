@@ -1,14 +1,15 @@
 <p>
- Users are cautioned to consider the nature of the information presented here 
- before making decisions using it that concern personal or public safety or 
- the conduct of business that involves substantial monetary or operational 
- consequences. Information concerning the accuracy and appropriate uses of 
- this information or other hydrologic data may be obtained from the report 
- (Snyder, 2009) or the author, whose name is shown as the contact, or from 
- the USGS groundwater specialist in Oregon. 
+This software has been approved for release by the U.S. Geological Survey (USGS). Although 
+the software has been subjected to rigorous review, the USGS reserves the right to update 
+the software as needed pursuant to further analysis and review. No warranty, expressed or 
+implied, is made by the USGS or the U.S. Government as to the functionality of the software 
+and related material nor shall the fact of release constitute any such warranty. Furthermore, 
+the software is released on condition that neither the USGS nor the U.S. Government shall be 
+held liable for any damages resulting from its authorized or unauthorized use.
 </p>
 <p>
-  <a href="http://pubs.usgs.gov/sir/2008/5059/" target="_blank"> Snyder, D.T., 2009, 
+ Information concerning the accuracy and appropriate uses of 
+ this information or other hydrologic data may be obtained from <a href="http://pubs.usgs.gov/sir/2008/5059/" target="_blank"> Snyder, D.T., 2009, 
   Estimated depth to groundwater and configuration of the water table in the Portland, 
    Oregon area: U.S. Geological Survey Scientific Investigations Report 2008-5059, 40 p. 
    (Available at http://pubs.usgs.gov/sir/2008/5059/)</a>
