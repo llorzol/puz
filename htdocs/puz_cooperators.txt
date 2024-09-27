@@ -1,18 +1,15 @@
  <p> 
-  Prepared in cooperation with:
+  <img class="images" height="60" width="107" src="images/Portland_BES_logo.jpg" alt="City of Portland Environmental Services"></img> City of Portland - <a href="https://www.portland.gov/bes" target="_blank">Environmental Services | Portland.gov</a>
  </p>
  <p> 
-  <img class="images" height="60" width="107" src="images/Portland_BES_logo.jpg"></img>the City of Portland, 
+  <img class="images" height="61" width="61" src="images/Gresham_logo.jpg" alt="City of Gresham"></img><a href="https://www.greshamoregon.gov/" target="_blank"> City of Gresham </a>
  </p>
  <p> 
-  <img class="images" height="61" width="61" src="images/Gresham_logo.jpg"></img>the City of Gresham, 
+  <img class="images" height="61" width="73" src="images/clackamas_logo.gif" alt="Clackamas County's Water Environment Services"></img><a href="https://www.clackamas.us/wes" target="_blank"> Clackamas County's Water Environment Services</a>
  </p>
  <p> 
-  <img class="images" height="61" width="73" src="images/clackamas_logo.gif"></img>Clackamas County's Water Environment Services,
+  <img class="images" height="70" width="69" src="images/multco_logo_cropped.jpg" alt="Multnomah County"></img><a href="https://www.multco.us/" target="_blank"> Multnomah County</a>
  </p>
  <p> 
-  <img class="images" height="70" width="69" src="images/multco_logo_cropped.jpg"></img>Multnomah County, and
- </p>
- <p> 
-  <img class="images" height="60" width="107" src="images/DHS_logo.jpg">the Oregon Department of Human Services under the Drinking Water Program
+  <img class="images" height="60" width="107" src="images/DHS_logo.jpg" alt="Oregon Department of Human Services under the Drinking Water Program"><a href="https://www.oregon.gov/oha/PH/HEALTHYENVIRONMENTS/DRINKINGWATER/Pages/index.aspx" target="_blank">Oregon Department of Human Services under the Drinking Water Program</a>
  </p>
