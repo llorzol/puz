@@ -1,20 +1,8 @@
       <p>
        <div class="Button">Questions on Estimated Depth to Ground Water and Configuration of the Water Table in the Portland, Oregon Area contact:</div>
-       <div class="MenuItem2">Joanna Thamke</div>
-       <div class="MenuItem2">USGS, Moda Tower address</div>
-       <div class="MenuItem2">601 SW 2nd Ave. Suite 1950</div>
-       <div class="MenuItem2">Portland, OR 97204</div>
-       <div class="MenuItem2">503-251-3270</div>
-     
-       <div class="MenuItem2"><a href="mailto:jothamke@usgs.gov">jothamke@usgs.gov</a></div>
+       <div class="MenuItem2"><a href="mailto:GS-W-OR_NWISWeb_GW_Inquiries@usgs.gov">GW specialist email</a></div>
       </p>
       <p>
        <div class="Button">Questions on the web explorer contact:</div>
-       <div class="MenuItem2">Lisa Hoaks</div>
-       <div class="MenuItem2">USGS, Moda Tower address</div>
-       <div class="MenuItem2">601 SW 2nd Ave. Suite 1950</div>
-       <div class="MenuItem2">Portland, OR 97204</div>
-       <div class="MenuItem2">971-275-2484</div>
-     
-       <div class="MenuItem2"><a href="mailto:lhoaks@usgs.gov">lhoaks@usgs.gov</a></div>
+       <div class="MenuItem2"><a href="mailto:gs-w-or_www@usgs.gov">web team email</a></div>
       </p>
