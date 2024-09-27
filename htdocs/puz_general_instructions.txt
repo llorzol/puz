@@ -1,34 +1,42 @@
  <p>
   <b>Site</b>: Enter a location using the <img src="css/icons/search.png">search tool on the map or click anywhere 
-  on the map within the Portland, Oregon metropolitan area (visible area within the area enclosed by the blue line of 
-  the study boundary) to obtain estimates of the average depth to ground water, elevation of 
-  ground water, land-surface elevation, and the uncertainty of the values for the selected location.
+  on the map within the Portland, Oregon metropolitan area (enclosed by the blue line of 
+  the study boundary) to obtain estimates of the average depth to ground water, water-table elevation, land-surface elevation, and the uncertainty of the values for the selected location.
  </p>
  <p>
-  The point representing the site will appear as a red dot. Once the scale is at a zoom level of twelve or more
-  a square box shaded according to depth with dark purples representing greater depths will appear instead of a 
-  red dot. The box is 250 feet on each side and represents the maximum level of detail for the groundwater depth mapping. 
+  The point representing the selected location will appear as a red dot. </br>
+  <span><img  height="200" width="200" src="images/site_point_location.png" alt="Site point location" class="img-fluid"></span>
+</p>
+<p>
+Once the scale is at a zoom level of twelve or more, a square box will appear instead of a red dot. The shading of the box
+represents depth with values increase from light to dark purple. The box is 250 feet on each side and represents the 
+maximum level of detail for the groundwater depth mapping. </br> 
+  <span><img height="200" width="200" src="images/site_cell_location.png" alt="Site cell location"></span>
  </p>
  <p>
-  To activate a popup message either hover or click the red dot or the purple-shaded polgon to display the estimates 
-  of the average depth to ground water, elevation of ground water, land-surface elevation, and the uncertainty of 
-  the values for the selected location. In addition the estimate of the average depth to ground water
-  will also be displayed in the message box in the upper right of the map. Additional warnings will be displayed 
-  if the location of the site is located outside of the the boundaries of the modelled area or outside of the study area. 
+  To activate a popup message either hover over the red dot or the purple-shaded box to display the estimates 
+  of the average depth to ground water, water-table elevation, land-surface elevation, and the uncertainty of 
+  the values for the selected location. Additional warnings will be displayed 
+  if the site is located outside of the modeled area or outside of the study area boundaries. 
+ </p>
+ <p>
+  <b>Relative uncertainty for depth to groundwater</b>:
+  <ul class="list-group list-group-flush">
+  <li class="list-group-item">Low: 0 - 0.33</li>
+  <li class="list-group-item">Medium: 0.34 - 0.67</li>
+  <li class="list-group-item">High: 0.68 - 1</li>
+</ul>
  </p>
 
  <p>
-  <b>Search Tool<img src="css/icons/search.png"></b>: Enter text that representing an address or a location
-  of values of latitude and longitude. The following are examples:
+  <b>Search Tool<img src="css/icons/search.png"></b>: Enter text for address or latitude and
+  longitude in horizontal datum. The following are examples:
  </p>
  <p>
    <h6> Address: </h6>
    </p>
    <p>
    <u>Street address:</u>  2120 SW 5th Ave., Portland, Oregon
-   </p>
-   <p>
-   <u>Intersection:</u>       SW 5th Ave. and SW Lincoln St., Portland, Oregon
    </p>
 
    <h4> Latitude and Longitude  </h4>
@@ -37,17 +45,11 @@
      <td><u>Degrees, Minutes, and Decimal Seconds:</u></td>
      <td>45 30 27.64N</td>
      <td>122 40 57.77W</td>
-     <td>or</td>
-     <td>45 30 27.64</td>
-     <td>-122 40 57.77</td>
     </tr>
     <tr>
      <td><u>Degrees and Decimal Minutes:</u></td>
      <td>45 30.4607N</td>
      <td>122 40.9628W</td>
-     <td>or</td>
-     <td>45 30.4607</td>
-     <td>-122 40.9628</td>
     </tr>
     <tr>
      <td><u>Decimal Degrees:</u></td>
@@ -65,10 +67,9 @@
  </p>
 
  <p>
-  <b>Panand Zoom</b>: Use standard map tools to adjust the map view to an area of interest.
+  <b>Pan and Zoom</b>: Use standard map tools to adjust the map view to an area of interest.
  </p>
 
  <p>
-  <b>Basemaps</b>: Use the basemaps feature to select other background image maps, satellite, terrain, topo, and 
-  photo options.
+  <b>Basemaps</b>: Use the basemaps feature to select other background image maps, satellite, terrain, and topographic options.
  </p>
