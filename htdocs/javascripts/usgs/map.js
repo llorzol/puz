@@ -4,8 +4,8 @@
  * Map is a JavaScript library to provide a set of functions to build
  *  a Leaflet Map Site.
  *
- * version 3.06
- * September 24, 2024
+ * version 3.07
+ * September 27, 2024
 */
 
 /*
@@ -214,7 +214,7 @@ function buildMap()
       provider: new GeoSearch.OpenStreetMapProvider(),
       showMarker: false,
       autoClose: true, 
-      searchLabel: "Enter address, intersection, or latitude/longitude"
+      searchLabel: "Enter address or latitude/longitude"
     })
     map.addControl(searchControl);
     $(".leaflet-control-geosearch form input").css('min-width', '400px');
