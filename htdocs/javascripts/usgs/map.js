@@ -4,8 +4,8 @@
  * Map is a JavaScript library to provide a set of functions to build
  *  a Leaflet Map Site.
  *
- * version 3.03
- * July 10, 2024
+ * version 3.06
+ * September 24, 2024
 */
 
 /*
@@ -148,7 +148,7 @@ function buildMap()
       
   // Create the miniMap
   //
-    miniMap = new L.Control.MiniMap(ESRItopoMinimap, { position: 'bottomleft', toggleDisplay: true }).addTo(map);
+    miniMap = new L.Control.MiniMap(ESRItopoMinimap, { toggleDisplay: true, position: 'bottomleft' }).addTo(map);
       
   // Create marker and raster cell layers
   //
@@ -210,19 +210,26 @@ function buildMap()
 
   // Create the geocoding control and add it to the map
   //
-  var searchControl = new L.esri.Controls.Geosearch({ zoomToResult: false, searchBounds: bounds }).addTo(map);
-  jQuery('.geocoder-control').prop('title', "Enter address, intersection, or latitude/longitude");
-  $(".geocoder-control").on("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-  });
+    var searchControl = new GeoSearch.GeoSearchControl({
+      provider: new GeoSearch.OpenStreetMapProvider(),
+      showMarker: false,
+      autoClose: true, 
+      searchLabel: "Enter address, intersection, or latitude/longitude"
+    })
+    map.addControl(searchControl);
+    $(".leaflet-control-geosearch form input").css('min-width', '400px');
+    $(".leaflet-control-geosearch form button").remove();
+    $(".leaflet-control-geosearch a").html('');
+    $(".leaflet-control-geosearch a").html('<img src="css/icons/search.png" class="searchPng">')
+    //$(".leaflet-control-geosearch a").html('<i class="fa-solid fa-magnifying-glass"></i>')
+    $(".leaflet-control-geosearch a").css('font-size', '2.5rem');
 
-  searchControl.on('results', function(data) {
+  map.on('geosearch/showlocation', function(data) {
       console.log("geocoding results ",data);
   			
-      if('latlng' in data)
+      if('location' in data)
         {
-          var myAddress = { latlng: { lng: data.latlng.lng,  lat: data.latlng.lat } };
+          var myAddress = { latlng: { lng: data.location.x,  lat: data.location.y } };
 
           onMapClick(markerLayer, rasterLayer, myAddress);
         }
@@ -493,7 +500,7 @@ function getDTW(markerPoint, myPoint)
     //
     var request_type = "GET";
         var script_http  = "../puz_new?";
-        //var script_http  = "/puzWsgi?";
+        var script_http  = "/cgi-bin/puz/puz_location.py?";
         var color_file = "color.file";
         var data_http    = "";
             data_http   += "longitude=" + markerPoint.x;
@@ -543,27 +550,27 @@ function showMarker(json)
        return false;
       }
  
-    var longitude              = json.longitude;
-    var latitude               = json.latitude;
-    var land_surface_elevation = json.rasters[0].value.toFixed(3);
+    var longitude              = json.longitude.toFixed(4);
+    var latitude               = json.latitude.toFixed(4);
+    var land_surface_elevation = json.rasters[0].value.toFixed(1);
     var water_level_max        = json.rasters[1].maximum;
     var water_level_min        = json.rasters[1].minimum;
-    var water_level            = json.rasters[1].value.toFixed(3);
-    var water_level_elevation  = (land_surface_elevation - water_level).toFixed(3);
-    var uncertainty            = json.rasters[2].value.toFixed(3);
+    var water_level            = json.rasters[1].value.toFixed(1);
+    var water_level_elevation  = (land_surface_elevation - water_level).toFixed(1);
+    var uncertainty            = json.rasters[3].value.toFixed(3);
     var rasterCell             = json.cell;
 
     if(uncertainty <= 0.33)
       {
-        uncertainty = "Low";
+        uncertainty = "Low (< 0.34)";
       }
     else if(uncertainty <= 0.67)
       {
-        uncertainty = "Moderate";
+        uncertainty = "Moderate (0.34 to 0.67)";
       }
     else
       {
-        uncertainty = "High";
+        uncertainty = "High (> 0.67)";
       }
 
     // Check zoom of map
@@ -572,7 +579,7 @@ function showMarker(json)
           
     // Place marker on map
     //
-    if(mapzoom < 12)
+    if(mapzoom < 13)
       {      
        marker = L.circle([latitude, longitude], 300, {
                   color: 'red',
