@@ -4,8 +4,8 @@
  * Map is a JavaScript library to provide a set of functions to build
  *  a Leaflet Map Site.
  *
- * version 3.07
- * September 27, 2024
+ * version 3.09
+ * September 28, 2024
 */
 
 /*
@@ -32,6 +32,7 @@
 ###############################################################################
 */
 var studyareaPolygon = [];
+var zoomArea         = false;
 
 // Prepare when the DOM is ready 
 //
@@ -86,12 +87,11 @@ function buildMap()
 
   // Add home button
   //
-  var zoomHome = L.Control.zoomHome();
-  zoomHome.addTo(map);
+  var zoom_bar = new L.Control.ZoomBar({position: 'topleft'}).addTo(map);
       
   // Clicked zoom home
   //
-  $(".leaflet-control-zoomhome-home").on("click", (e) => {
+    $(".leaflet-control-zoom-to-start").on("click", (e) => {
 
       // Clear raster polygons
       //
@@ -106,7 +106,7 @@ function buildMap()
               water_level_elevation  = layer.properties.water_level_elevation;
               uncertainty            = layer.properties.uncertainty;
            
-              marker = L.circle([latitude, longitude], 150, {
+              marker = L.circle([latitude, longitude], 300, {
                   color: 'red',
                   fillColor: '#f03',
                   zIndexOffset: 999,
@@ -140,6 +140,14 @@ function buildMap()
           map.removeLayer(rasterLayer);
           rasterLayer.clearLayers();
          }
+  });
+      
+  // Clicked zoom home
+  //
+    $(".leaflet-control-zoom-to-area").on("click", (e) => {
+
+      zoomArea = true;
+      console.log(`zoomArea ${zoomArea}`);
   });
       
   // Add base map
@@ -314,8 +322,12 @@ function buildMap()
 
   // Generate point location
   //
-  map.on('click', function(evt) {
-      onMapClick(markerLayer, rasterLayer, evt);
+    map.on('click', function(evt) {
+      console.log(`zoomArea ${zoomArea}`);
+      if(zoomArea) { zoomArea = false; }
+      else {
+        onMapClick(markerLayer, rasterLayer, evt);
+      }
    });
 
   // Remove point location(s)
@@ -426,7 +438,7 @@ function onMapClick(markerLayer, rasterLayer, evt)
           // Place marker on map
           //
           marker = L.circle([lat, long], 
-                            2, 
+                            300, 
                             {
                              color: 'red',
                              fillColor: '#f03',
