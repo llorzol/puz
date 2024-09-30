@@ -4,8 +4,8 @@
  * Map is a JavaScript library to provide a set of functions to build
  *  a Leaflet Map Site.
  *
- * version 3.09
- * September 28, 2024
+ * version 3.10
+ * September 30, 2024
 */
 
 /*
@@ -33,6 +33,7 @@
 */
 var studyareaPolygon = [];
 var zoomArea         = false;
+var radius           = 3;
 
 // Prepare when the DOM is ready 
 //
@@ -69,7 +70,14 @@ function buildMap()
   // Create the map object
   //
   map = new L.map('map', {zoomControl: false});
+      
+  // Create marker and raster cell layers
+  //
+  markerLayer  = new L.LayerGroup();
+  rasterLayer  = new L.LayerGroup();
 
+  // Determine bounds
+  //
   map.fitBounds([
                  [map_bounds.lat_max, map_bounds.long_max], 
                  [map_bounds.lat_min, map_bounds.long_min]
@@ -84,6 +92,28 @@ function buildMap()
   //
   //$(".leaflet-control-zoom").css("visibility", "visible");
   map.scrollWheelZoom.disable();    
+      
+  // Scroll message
+  //
+  $("#map").on("mouseover", function () {
+      if(!myZoomFlag)
+        {
+         myZoomFlag = true
+         message = "Use Shift-Left Mouse Drag: Select a region by pressing the Shift key and dragging the left mouse button"
+         openModal(message);
+         fadeModal(2000);
+        }
+  });
+
+   // Create map pane for marker layer
+   //
+   markerPane = map.createPane('markerSites');
+   map.getPane('markerSites').style.zIndex = 620;
+
+   // Create map pane for cell layer
+   //
+   cellPane = map.createPane('cellSites');
+   map.getPane('cellSites').style.zIndex = 620;
 
   // Add home button
   //
@@ -93,53 +123,9 @@ function buildMap()
   //
     $(".leaflet-control-zoom-to-start").on("click", (e) => {
 
-      // Clear raster polygons
+      // Set marker or cell on map
       //
-      if(rasterLayer.getLayers().length > 0)
-         {
-          rasterLayer.eachLayer(function(layer) {
-
-              longitude              = layer.properties.longitude;
-              latitude               = layer.properties.latitude;
-              land_surface_elevation = layer.properties.land_surface_elevation;
-              water_level            = layer.properties.water_level;
-              water_level_elevation  = layer.properties.water_level_elevation;
-              uncertainty            = layer.properties.uncertainty;
-           
-              marker = L.circle([latitude, longitude], 300, {
-                  color: 'red',
-                  fillColor: '#f03',
-                  zIndexOffset: 999,
-                  fillOpacity: 0.9
-              });
-
-              marker.properties = {};
-              marker.properties.longitude = longitude;
-              marker.properties.latitude  = latitude;
-              marker.properties.land_surface_elevation  = land_surface_elevation;
-              marker.properties.water_level = water_level;
-              marker.properties.water_level_elevation  = water_level_elevation;
-              marker.properties.uncertainty  = uncertainty;
-   
-              markerLayer.addLayer(marker);
-              map.addLayer(markerLayer);
-          
-              createPopUp(marker, {
-                     'longitude': longitude,
-                     'latitude':  latitude,
-                     'land_surface_elevation': land_surface_elevation,
-                     'water_level': water_level,
-                     'water_level_elevation': water_level_elevation,
-                     'uncertainty': uncertainty
-              });
-              
-          });
-              
-          // Delete raster cell              
-          //
-          map.removeLayer(rasterLayer);
-          rasterLayer.clearLayers();
-         }
+      setMarkerOrCell()
   });
       
   // Clicked zoom home
@@ -148,6 +134,10 @@ function buildMap()
 
       zoomArea = true;
       console.log(`zoomArea ${zoomArea}`);
+
+      // Set marker or cell on map
+      //
+      setMarkerOrCell()
   });
       
   // Add base map
@@ -157,11 +147,6 @@ function buildMap()
   // Create the miniMap
   //
     miniMap = new L.Control.MiniMap(ESRItopoMinimap, { toggleDisplay: true, position: 'bottomleft' }).addTo(map);
-      
-  // Create marker and raster cell layers
-  //
-  markerLayer  = new L.LayerGroup();
-  rasterLayer  = new L.LayerGroup();
 
   // Add raster layers
   //
@@ -296,28 +281,18 @@ function buildMap()
          $("#basemapButton").dropdown("toggle");
       });
   });
-      
-  // Scroll message
-  //
-  $("#map").on("mouseover", function () {
-      if(!myZoomFlag)
-        {
-         myZoomFlag = true
-         message = "Use Shift-Left Mouse Drag: Select a region by pressing the Shift key and dragging the left mouse button"
-         openModal(message);
-         fadeModal(2000);
-        }
-  });
 
   // Show initial map zoom level
   //
-  jQuery( ".mapZoom" ).html( "<b>Zoom Level: </b>" + map.getZoom());
+  console.log(`Zoom level ${map.getZoom()}`);
 
   // Refresh sites on extent change
   //
   map.on('zoomend dragend', function(evt) {
-      jQuery( ".mapZoom" ).html( "<b>Zoom Level: </b>" + map.getZoom());
-      //jQuery( ".latlng" ).html(evt.latlng.lng.toFixed(3) + ", " + evt.latlng.lat.toFixed(3));
+
+    // Set marker or cell on map
+    //
+    setMarkerOrCell()
   });
 
   // Generate point location
@@ -415,7 +390,7 @@ function isPointInPoly(poly, pt)
 
 function onMapClick(markerLayer, rasterLayer, evt) 
   {
-   if(typeof evt !== "undefined")
+   if(evt)
      {
       // Translate map click location to model grid coordinates
       //
@@ -437,14 +412,15 @@ function onMapClick(markerLayer, rasterLayer, evt)
         {                                              
           // Place marker on map
           //
-          marker = L.circle([lat, long], 
-                            300, 
-                            {
-                             color: 'red',
-                             fillColor: '#f03',
-                             zIndexOffset: 999,
-                             fillOpacity: 0.9
-                            });
+          marker = L.circleMarker([lat, long],
+                                  {
+                                    pane: 'markerSites',
+                                    radius: radius,
+                                    color: '#f03',
+                                    weight: 1,
+                                    fillColor: '#f03',
+                                    fillOpacity: 0.9
+                                  });
     
           // Add marker
           //
@@ -549,11 +525,11 @@ function showMarker(json)
     if(json.status == "fail")
       {
         var message = "";
-        if(typeof json.error !== "undefined")
+        if(json.error)
           {
             message = json.error;
           }
-        if(typeof json.warning !== "undefined")
+        if(json.warning)
           {
             message = json.warning;
           }
@@ -584,20 +560,16 @@ function showMarker(json)
       {
         uncertainty = "High (> 0.67)";
       }
-
-    // Check zoom of map
-    //
-    var mapzoom = map.getZoom();
           
     // Place marker on map
     //
-    if(mapzoom < 13)
-      {      
-       marker = L.circle([latitude, longitude], 300, {
-                  color: 'red',
-                  fillColor: '#f03',
-                  zIndexOffset: 999,
-                  fillOpacity: 0.9
+        marker = L.circleMarker([latitude, longitude], {
+          pane: 'markerSites',
+          color: 'red',
+          radius: radius,
+          fillColor: '#f03',
+          zIndexOffset: 999,
+          fillOpacity: 0.9
         });
 
        marker.properties = {};
@@ -611,7 +583,7 @@ function showMarker(json)
        console.log("Marker");
    
        markerLayer.addLayer(marker);
-       map.addLayer(markerLayer);
+       //map.addLayer(markerLayer);
           
        createPopUp(marker, {
               'longitude': longitude,
@@ -621,12 +593,9 @@ function showMarker(json)
               'water_level_elevation': water_level_elevation,
               'uncertainty': uncertainty
        });
-      }
-          
-    // Place raster cell on map
-    //
-    else
-      {
+
+       console.log("Cell");
+
        rasterPolygon = addCell(rasterCell, water_level, water_level_min, water_level_max);
 
        rasterPolygon.properties = {};
@@ -638,7 +607,7 @@ function showMarker(json)
        rasterPolygon.properties.uncertainty  = uncertainty;
     
        rasterLayer.addLayer(rasterPolygon);
-       map.addLayer(rasterLayer);
+       //map.addLayer(rasterLayer);
           
        createPopUp(rasterPolygon, {
               'longitude': longitude,
@@ -648,8 +617,77 @@ function showMarker(json)
               'water_level_elevation': water_level_elevation,
               'uncertainty': uncertainty
        });
-      }
 
+    // Check zoom of map
+    //
+    setMarkerOrCell()
+
+  }
+
+// Set marker or cell on map
+//
+function setMarkerOrCell() 
+  {
+    // Check zoom of map
+    //
+    var mapzoom = map.getZoom();
+    console.log(`setMarkerOrCell Zoom level ${mapzoom}`);
+          
+    // Place marker on map
+    //
+    if(mapzoom < 13) {
+
+      console.log(`Add marker layer Zoom level ${mapzoom}`);
+
+      // Hide cell layer
+      //
+      if(map.hasLayer(rasterLayer))
+        {
+          map.removeLayer(rasterLayer);
+          cellPane.style.pointerEvents = 'none';
+          cellPane.style.opacity = 0.0;
+        }
+      
+      // Show marker layer
+      //
+      if(!map.hasLayer(markerLayer))
+        {
+          map.addLayer(markerLayer);
+          markerPane.style.pointerEvents = 'auto';
+          markerPane.style.opacity = 1.0;
+          //map.getPane('markerSites').style.opacity = 1.0;
+        }
+      }
+          
+    // Place raster cell on map
+    //
+    else {
+
+      console.log(`Add cell layer Zoom level ${mapzoom}`);
+
+      // Hide marker layer
+      //
+      if(map.hasLayer(markerLayer))
+        {
+          map.removeLayer(markerLayer);
+          markerPane.style.pointerEvents = 'none';
+          markerPane.style.opacity = 0.0;
+       }
+      // Show cell layer
+      //
+      if(!map.hasLayer(rasterLayer))
+        {
+          map.addLayer(rasterLayer);
+          cellPane.style.pointerEvents = 'auto';
+          cellPane.style.opacity = 1.0;
+        }
+      }
+  }
+    
+function addMarker(rasterCell, water_level, water_level_min, water_level_max) 
+  {
+
+    return myMarker;
   }
     
 function addCell(rasterCell, water_level, water_level_min, water_level_max) 
@@ -685,10 +723,11 @@ function addCell(rasterCell, water_level, water_level_min, water_level_max)
       }
       
     myCell = L.polygon(polygon, {
-                                 stroke: false,
-                                 color: 'black',
-                                 fillColor: myColor,
-                                 fillOpacity: 0.5
+      pane: 'cellSites',
+      stroke: false,
+      color: 'black',
+      fillColor: myColor,
+      fillOpacity: 0.5
     });
 
     return myCell;
