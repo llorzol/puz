@@ -4,8 +4,10 @@
  * Map_Coordinate is a JavaScript library to project "on-the-fly" a set on input
  *  coordinates to several other projections such as UTM and others.
  *
- * version 1.24
- * August 25, 2017
+ * $Id: /var/www/html/puz/javascripts/usgs/map_coordinate.js, v 1.25 2023/07/03 06:24:06 llorzol Exp $
+ * $Revision: 1.25 $
+ * $Date: 2023/07/03 06:24:06 $
+ * $Author: llorzol $
 */
 
 /*
@@ -139,4 +141,3 @@ function DMS2dec(long, lat)
 
    return [lat, long];
   }
-
