@@ -4,8 +4,10 @@
  * Map is a JavaScript library to provide a set of functions to build
  *  a Leaflet Map Site.
  *
- * version 3.10
- * September 30, 2024
+ * $Id: /var/www/html/puz/javascripts/usgs/map.js, v 3.11 2026/09/13 09:46:39 llorzol Exp $
+ * $Revision: 3.11 $
+ * $Date: 2026/09/13 09:46:39 $
+ * $Author: llorzol $
 */
 
 /*
@@ -31,122 +33,128 @@
 # DEALINGS IN THE SOFTWARE.
 ###############################################################################
 */
-var studyareaPolygon = [];
+// Set for map
+//
+var map;
+var miniMap;
+
+var boundaryLayer;
 var zoomArea         = false;
 var radius           = 3;
 
+// Create marker and raster cell layers
+//
+var markerLayer  = new L.LayerGroup();
+var rasterLayer  = new L.LayerGroup();
+
+// Set basemap
+//
+var ESRItopoBasemap     = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {attribution: 'MRLC, State of Oregon, State of Oregon DOT, State of Oregon GEO, Esri, DeLorme, HERE, TomTom, USGS, NGA, EPA, NPS, U.S. Forest Service'});
+var ESRIusaTopoMinimap  = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/USA_Topo_Maps/MapServer/tile/{z}/{y}/{x}", {opacity: 0.7,attribution: 'Copyright:&copy; 2013 National Geographic Society, i-cubed'});
+
 // Prepare when the DOM is ready 
 //
-function buildMap() 
-  {
-  // Loading message
-  //
-  message = "Processing map information ";
-  openModal(message);
-  console.log(message);
-  
-  // Insert accordion text
-  //
-  jQuery.each(aboutFiles, function(keyItem, keyFile) {
-  
-      var InfoText = loadText(keyFile);
-  
-      jQuery("#" + keyItem).html(InfoText);
-  
-  });
+function buildMap() {
+    // Loading message
+    //
+    message = "Processing map information ";
+    openModal(message);
 
-  closeModal(message);
+    fadeModal(2000);
+    closeModal();
+    
+    myLogger.info("Building map");
 
-  // Set bounds based upon framework information
-  //
-  map_bounds = setBounds(raster_projection,
-                         latlong_projection,
-                         northwest_x, northwest_y,
-                         northeast_x, northeast_y,
-                         southwest_x, southwest_y,
-                         southeast_x, southeast_y
-                        );
+    // Create the map object
+    //
+    map = new L.map('map', { scrollWheelZoom: false, zoomControl: false});
 
-  // Create the map object
-  //
-  map = new L.map('map', {zoomControl: false});
-      
-  // Create marker and raster cell layers
-  //
-  markerLayer  = new L.LayerGroup();
-  rasterLayer  = new L.LayerGroup();
-
-  // Determine bounds
-  //
-  map.fitBounds([
-                 [map_bounds.lat_max, map_bounds.long_max], 
-                 [map_bounds.lat_min, map_bounds.long_min]
-                ]);
-
-  map.setMaxBounds([
-                 [map_bounds.lat_max, map_bounds.long_max], 
-                 [map_bounds.lat_min, map_bounds.long_min]
-                ]);
-      
-  // Disable controls for map view
-  //
-  //$(".leaflet-control-zoom").css("visibility", "visible");
-  map.scrollWheelZoom.disable();    
-      
-  // Scroll message
-  //
-  $("#map").on("mouseover", function () {
-      if(!myZoomFlag)
-        {
-         myZoomFlag = true
-         message = "Use Shift-Left Mouse Drag: Select a region by pressing the Shift key and dragging the left mouse button"
-         openModal(message);
-         fadeModal(2000);
+    // Scroll message
+    //
+    $("#map").on("mouseover", function () {
+        if(!myZoomFlag) {
+            myZoomFlag = true
+            message = "Use Shift-Left Mouse Drag: Select a region by pressing the Shift key and dragging the left mouse button"
+            openModal(message);
+            fadeModal(2000);
         }
-  });
+    });
 
-   // Create map pane for marker layer
-   //
-   markerPane = map.createPane('markerSites');
-   map.getPane('markerSites').style.zIndex = 620;
+    // Create map pane for marker layer
+    //
+    markerPane = map.createPane('markerSites');
+    map.getPane('markerSites').style.zIndex = 620;
 
-   // Create map pane for cell layer
-   //
-   cellPane = map.createPane('cellSites');
-   map.getPane('cellSites').style.zIndex = 620;
+    // Create map pane for cell layer
+    //
+    cellPane = map.createPane('cellSites');
+    map.getPane('cellSites').style.zIndex = 620;
 
-  // Add home button
-  //
-  var zoom_bar = new L.Control.ZoomBar({position: 'topleft'}).addTo(map);
-      
-  // Clicked zoom home
-  //
+    // Add studyarea boundary
+    //
+    dummyPane = map.createPane('studyBoundary');
+    map.getPane('studyBoundary').style.pointerEvents = 'none';
+    map.getPane('studyBoundary').style.zIndex = 600;
+
+    boundaryLayer = L.geoJson(StudyBoundary, {
+        pane: 'studyBoundary',
+        style: { color: "red", weight: 3, opacity: 0.7, fill: false }
+    }).addTo(map);
+
+    // Set the bounds
+    //
+    map.fitBounds(boundaryLayer.getBounds());
+    myLogger.info(boundaryLayer.getBounds());
+
+    // Set maximum bounds
+    //
+    map.setMaxBounds(boundaryLayer.getBounds());
+
+    // Add base map
+    //
+    map.addLayer(USGSTopoBasemap);
+
+    // Add the control for background base maps
+    //
+    let baseMaps = {};
+    let overlayMaps = {};
+    for(let i = 0; i < basemapNameArray.length; i++) {
+        baseMaps[basemapNameArray[i][1]] = basemapObj[basemapNameArray[i][0]]
+    }
+    let layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+    // Add mini map
+    //
+    let miniMaps = {};
+    for(let i = 0; i < MinimapNameArray.length; i++) {
+        miniMaps[MinimapNameArray[i][1]] = minimapObj[MinimapNameArray[i][0]]
+    }
+    let miniMap = new L.Control.MiniMap(USGSTopoMinimap, { position: 'bottomleft', toggleDisplay: true }).addTo(map)
+    
+    // Add home button
+    //
+    let zoom_bar = new L.Control.ZoomBar({position: 'topleft'}).addTo(map);
+
+    // Clicked zoom home
+    //
     $(".leaflet-control-zoom-to-start").on("click", (e) => {
 
-      // Set marker or cell on map
-      //
-      setMarkerOrCell()
-  });
-      
-  // Clicked zoom home
-  //
+        // Set marker or cell on map
+        //
+        setMarkerOrCell()
+    });
+
+    // Clicked zoom home
+    //
     $(".leaflet-control-zoom-to-area").on("click", (e) => {
 
-      zoomArea = true;
-      console.log(`zoomArea ${zoomArea}`);
+        zoomArea = true;
+        myLogger.info(`zoomArea ${zoomArea}`);
 
-      // Set marker or cell on map
-      //
-      setMarkerOrCell()
-  });
-      
-  // Add base map
-  //
-  map.addLayer(ESRItopoBasemap);
-      
-  // Create the miniMap
-  //
-    miniMap = new L.Control.MiniMap(ESRItopoMinimap, { toggleDisplay: true, position: 'bottomleft' }).addTo(map);
+        // Set marker or cell on map
+        //
+        setMarkerOrCell()
+    });
 
   // Add raster layers
   //
@@ -155,24 +163,6 @@ function buildMap()
   //L.tileLayer('lsd_tiles/9/80/329.png').addTo(map);
 	  
   //L.control.scale().addTo(map);
-
-  // Add studyarea boundary
-  //
-  if(studtyareaJson)
-    {
-     console.log("Adding studyarea boundary ");
-     var studtyareaLayer = L.geoJson(studtyareaJson, {
-         onEachFeature: function(feature, featureLayer) {
-             polygonCoordinates = feature.geometry.coordinates[0];
-             //console.log("polygonCoordinates length " + polygonCoordinates.length);
-             for(let i = 0; i < polygonCoordinates.length; i++) {
-                 studyareaPolygon.push({ x: polygonCoordinates[i][0],
-                                         y: polygonCoordinates[i][1]});
-             }
-             //console.log("studyareaPolygon");
-             //console.log(studyareaPolygon);
-         }}).addTo(map);
-    }
 
   // Add zoom to your location
   //
@@ -183,23 +173,28 @@ function buildMap()
       strings: { title: "Move and zoom to your location" }
   }).addTo(map);
 
-  // Remove locations tool
-  //
-  var removeTool = [];
-      removeTool.push('<div id="removeLocationButton" class="d-flex align-items-center justify-content-center">');
-      removeTool.push('<i class="bi bi-trash"></i>')
-      //removeTool.push('<strong>Remove Locations</strong>');
-      removeTool.push('</div>');
-      L.easyButton(removeTool.join(" "), function(btn, map) {
-          resetPoints(markerLayer, rasterLayer);
-      }).addTo(map);
-      $('.easy-button-container').prop('title','Click to remove existing locations on map');
-      
-  // Map bounds for geocoding tool
-  //
-  const corner1 = L.latLng(map_bounds.lat_max, map_bounds.long_ma);
-  const corner2 = L.latLng(map_bounds.lat_min, map_bounds.long_mi);
-  const bounds  = L.latLngBounds(corner1, corner2);
+    // Remove locations tool
+    //
+    var removeLocationTool = L.easyButton({
+        id: 'removeLocationTool',
+        states: [{
+            icon: '<img src="easy-button/trash.svg" class="img-fluid">',
+            title: 'Click to remove existing locations on map',
+            onClick: function(control) {
+                resetPoints(markerLayer, rasterLayer);
+            }
+        }]
+    }).addTo(map);
+
+    // Map bounds for geocoding tool
+    //
+    let map_bounds = map.getBounds();
+    var southWest = map_bounds.getSouthWest(); // LatLng object
+    var northEast = map_bounds.getNorthEast(); // LatLng object
+
+    const corner1 = L.latLng(northEast.lat, southWest.lng);
+    const corner2 = L.latLng(southWest.lat, northEast.lng);
+    const bounds  = L.latLngBounds(corner1, corner2);
 
   // Create the geocoding control and add it to the map
   //
@@ -218,7 +213,7 @@ function buildMap()
     $(".leaflet-control-geosearch a").css('font-size', '2.5rem');
 
   map.on('geosearch/showlocation', function(data) {
-      console.log("geocoding results ",data);
+      myLogger.info("geocoding results ",data);
   			
       if('location' in data)
         {
@@ -227,64 +222,6 @@ function buildMap()
           onMapClick(markerLayer, rasterLayer, myAddress);
         }
   });
-      
-  // Base maps button from baseMaps.js
-  //
-  var basemapControl = L.control({position: 'topright'});
-  basemapControl.onAdd = function (map) {
-      var div = L.DomUtil.create('div', 'baseMaps NoJump');
-      div.innerHTML = baseMapContent.join(" ");
-      div.firstChild.onmousedown = div.firstChild.ondblclick = L.DomEvent.stopPropagation;
-      return div;
-  };
-  basemapControl.addTo(map);      
-  $('.baseMaps').prop('title','Click to change background on map');
-      
-  // Set current basemap active in dropdown menu
-  //
-  jQuery('#ESRItopoBasemap').addClass('active');
-      
-  // Clicked base map
-  //
-  $(".baseMaps").on("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-  			
-      // Clicked base map
-      //
-      jQuery('#basemapMenu li').click(function()
-        {
-         // Dont do anything if the current active layer is clicked
-         //
-         if(!map.hasLayer(window[$(this).prop("id")]))
-           {			
-            // Remove currently active basemap
-            //
-            jQuery("#basemapMenu li.active").each(function () 
-               {
-                console.log("removing ",$(this).prop("id"));
-
-                map.removeLayer(window[$(this).prop("id")]);
-                jQuery(this).removeClass("active");
-               });
-   			
-            // Make new selection active and add to map
-            //
-            console.log("Active ",$(this).prop("id"));
-            jQuery(this).addClass('active');
-            map.addLayer(window[$(this).prop("id")]);
-            miniMap.changeLayer(minimapObj[$(this).prop("id")]);
-           }
-   
-         // Close after clicked
-         //
-         $("#basemapButton").dropdown("toggle");
-      });
-  });
-
-  // Show initial map zoom level
-  //
-  console.log(`Zoom level ${map.getZoom()}`);
 
   // Refresh sites on extent change
   //
@@ -298,7 +235,7 @@ function buildMap()
   // Generate point location
   //
     map.on('click', function(evt) {
-      console.log(`zoomArea ${zoomArea}`);
+      myLogger.info(`zoomArea ${zoomArea}`);
       if(zoomArea) { zoomArea = false; }
       else {
         onMapClick(markerLayer, rasterLayer, evt);
@@ -379,7 +316,7 @@ function updateLegend(v, currentMap, updateType) {
 
 // Determine if a point is within raster
 //
-function isPointInPoly(poly, pt)
+function isPointInPolyOld(poly, pt)
   {
     for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
 	((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
@@ -387,47 +324,52 @@ function isPointInPoly(poly, pt)
 	&& (c = !c);
     return c;
   }
-
-function onMapClick(markerLayer, rasterLayer, evt) 
-  {
-   if(evt)
-     {
-      // Translate map click location to model grid coordinates
-      //
-      var long                   = evt.latlng.lng;
-      var lat                    = evt.latlng.lat;
-  
-      var coordinate             = User2User(
-                                             { "x": long, "y": lat },
-                                             latlong_projection,
-                                             raster_projection
-                                            );
-     console.log("coordinate");
-     console.log(coordinate);
-     console.log(studyareaPolygon);
  
-      // Point inside model grid
-      //
-      if(isPointInPoly(studyareaPolygon, {x: long, y: lat}) > 0)
-        {                                              
-          // Place marker on map
-          //
-          marker = L.circleMarker([lat, long],
-                                  {
-                                    pane: 'markerSites',
-                                    radius: radius,
-                                    color: '#f03',
-                                    weight: 1,
-                                    fillColor: '#f03',
-                                    fillOpacity: 0.9
-                                  });
+// Determine if a point is within Model grid
+//
+function isPointInPoly(poly, pt) {
     
-          // Add marker
-          //
-          //markerLayer.addLayer(marker);
-          //map.addLayer(markerLayer);
+    if(leafletPip.pointInLayer(pt, poly).length > 0) return true;
+    else return false;
+}
 
-         var dtw = getDTW({ x: long, y: lat }, { x: coordinate[0], y: coordinate[1] });
+function onMapClick(markerLayer, rasterLayer, evt) {
+    if(evt) {
+        // Translate map click location to model grid coordinates
+        //
+        var long                   = evt.latlng.lng;
+        var lat                    = evt.latlng.lat;
+
+        var coordinate             = User2User(
+            { "x": long, "y": lat },
+            latlong_projection,
+            raster_projection
+        );
+        myLogger.info("coordinate");
+        myLogger.info(coordinate);
+        myLogger.info(boundaryLayer);
+
+        // Point inside model grid
+        //
+        if(isPointInPoly(boundaryLayer, [long, lat])) {
+            // Place marker on map
+            //
+            marker = L.circleMarker([lat, long],
+                                    {
+                                        pane: 'markerSites',
+                                        radius: radius,
+                                        color: '#f03',
+                                        weight: 1,
+                                        fillColor: '#f03',
+                                        fillOpacity: 0.9
+                                    });
+
+            // Add marker
+            //
+            //markerLayer.addLayer(marker);
+            //map.addLayer(markerLayer);
+
+            var dtw = getDTW({ x: long, y: lat }, { x: coordinate[0], y: coordinate[1] });
         }
                                   
       // Point outside model grid
@@ -442,9 +384,8 @@ function onMapClick(markerLayer, rasterLayer, evt)
     }
 }
 
-function outsideStudyArea()
-  { 
-    console.log("Point is located outside the boundaries of the study");
+function outsideStudyArea() { 
+    myLogger.info("Point is located outside the boundaries of the study");
          var message = "Point is located outside the boundaries of the study";
          openModal(message);
          fadeModal(5000);
@@ -453,7 +394,7 @@ function outsideStudyArea()
 
 function resetPoints(markerLayer, rasterLayer)
   { 
-    console.log("Removing all location information");
+    myLogger.info("Removing all location information");
 
    // Clear markers and raster polygons
    //
@@ -479,7 +420,7 @@ function getDTW(markerPoint, myPoint)
   {
     // Determine if point is inside raster
     //
-    console.log("Web " + myPoint.x + " " + myPoint.y);
+    myLogger.info("Web " + myPoint.x + " " + myPoint.y);
 
     var message = "Retrieving location information, please wait. ";
     openModal(message);
@@ -497,7 +438,7 @@ function getDTW(markerPoint, myPoint)
             data_http   += "&y_coordinate=" + myPoint.y;
             data_http   += "&rasters=" + rasters.join(" ");
             data_http   += "&color=" + color_file;
-            data_http   += "&raster_origin=" + [raster_coordinates.northwest.x, raster_coordinates.northwest.y].join(" ");
+            data_http   += "&raster_origin=" + [raster_origin.x, raster_origin.y].join(" ");
             //data_http   += "&northwest_corner=" + [raster_coordinates.origin.x, raster_coordinates.origin.y].join(",");
             //data_http   += "&northeast_corner=" + [raster_coordinates.row_1.x, raster_coordinates.row_1.y].join(",");
             //data_http   += "&northeast_corner=" + [raster_coordinates.col_1.x, raster_coordinates.col_1.y].join(",");
@@ -580,7 +521,7 @@ function showMarker(json)
        marker.properties.water_level_elevation  = water_level_elevation;
        marker.properties.uncertainty  = uncertainty;
 
-       console.log("Marker");
+       myLogger.info("Marker");
    
        markerLayer.addLayer(marker);
        //map.addLayer(markerLayer);
@@ -594,7 +535,7 @@ function showMarker(json)
               'uncertainty': uncertainty
        });
 
-       console.log("Cell");
+       myLogger.info("Cell");
 
        rasterPolygon = addCell(rasterCell, water_level, water_level_min, water_level_max);
 
@@ -631,13 +572,13 @@ function setMarkerOrCell()
     // Check zoom of map
     //
     var mapzoom = map.getZoom();
-    console.log(`setMarkerOrCell Zoom level ${mapzoom}`);
+    myLogger.info(`setMarkerOrCell Zoom level ${mapzoom}`);
           
     // Place marker on map
     //
     if(mapzoom < 13) {
 
-      console.log(`Add marker layer Zoom level ${mapzoom}`);
+      myLogger.info(`Add marker layer Zoom level ${mapzoom}`);
 
       // Hide cell layer
       //
@@ -663,7 +604,7 @@ function setMarkerOrCell()
     //
     else {
 
-      console.log(`Add cell layer Zoom level ${mapzoom}`);
+      myLogger.info(`Add cell layer Zoom level ${mapzoom}`);
 
       // Hide marker layer
       //
