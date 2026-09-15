@@ -3,8 +3,10 @@
  *
  * The file popup.css is a css file to providing styling for Popups. 
  *
- * version 3.03
- * September 24, 2024
+ * $Id: /var/www/html/puz/css/usgs/popup.css, v 3.04 2026/09/13 20:44:12 llorzol Exp $
+ * $Revision: 3.04 $
+ * $Date: 2026/09/13 20:44:12 $
+ * $Author: llorzol $
 */
 
 /*
@@ -48,6 +50,7 @@
     -webkit-border-radius: 5px; /* for safari */
     -moz-border-radius: 5px; /* for firefox < 4 */
     border-radius: 5px; /* for all other that support it */
+    z-index: 700;
 }
 
 .leaflet-popup-title {
