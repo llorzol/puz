@@ -2,14 +2,17 @@
  *
  * Dialog is a JavaScript library to display modal windows.
  *
- * version 1.14
- * November 29, 2021
+ $Id: /var/www/html/fps/javascripts/gages/modal.js, v 2.09 2026/07/30 20:37:05 llorzol Exp $
+ $Revision: 2.09 $
+ $Date: 2026/07/30 20:37:05 $
+ $Author: llorzol $
+ *
  */
 
 /*
 ###############################################################################
-# Copyright (c) Office of Planning and Programming (OPP)
-# 
+# Copyright (c) Oregon Water Science Center
+#
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
 # to deal in the Software without restriction, including without limitation
@@ -31,57 +34,70 @@
 */
 var modalDialog = [];
 
-//modalDialog.push('<!-- Modal -->');
-modalDialog.push('<div class="modal" id="messageDialog" tabindex="-1" role="dialog" aria-labelledby="messageDialog" aria-hidden="true">');
-modalDialog.push('  <div class="modal-dialog modal-dialog-centered" role="document">');
-modalDialog.push('    <div class="modal-content">');
-//modalDialog.push('      <div class="modal-header">');
-//modalDialog.push('        <button type="button" class="close" data-dismiss="modal" aria-label="Close">');
-//modalDialog.push('          <span aria-hidden="true">&times;</span>');
-//modalDialog.push('        </button>');
-//modalDialog.push('      </div>');
-modalDialog.push('      <div class="modal-body">');
-modalDialog.push('       <div class="spinner-border text-light" role="status"></div>');
-modalDialog.push('       <span id="message"</span>');
+modalDialog.push('<div class="modal fade" id="messageDialog">');
+modalDialog.push('  <div class="modal-dialog modal-lg" role="dialog">');
+modalDialog.push('    <div class="modal-content bg-success">');
+modalDialog.push('      <div class="modal-body border-5 border-dark-subtle shadow-lg rounded-2">');
+modalDialog.push('       <div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div>')
+modalDialog.push('       <div><span id="message"class="clear fs-5 fw-bold text-white"></span></div>');
 modalDialog.push('      </div>');
 modalDialog.push('    </div>');
 modalDialog.push('  </div>');
 modalDialog.push('</div>');
 
-function openModal(message) 
-  {
-   console.log("openModal " + jQuery('#messageDialog').length);
-   if(jQuery('#messageDialog').length < 1)
-     {
-      jQuery('body').append(modalDialog.join('\n'));
-      console.log("add openModal " + jQuery('#messageDialog').length);
-     }
+function openModal(message) {
+    //console.log("openModal " + jQuery('#messageDialog').length);
+    if (jQuery('#messageDialog').length < 1) {
+        jQuery('body').append(modalDialog.join('\n'));
+        //console.log("append openModal " + jQuery('#messageDialog').length);
+    }
 
-   jQuery('span#message').html(message);
-//   jQuery('#messageDialog').modal('show');
-      jQuery('#messageDialog').show();
-  }; 
+    jQuery('#message').text(message);
 
-function closeModal() 
-  {
-   console.log("closeModal " + jQuery('#messageDialog').length);
-//   jQuery("#messageDialog").modal('hide');
-      jQuery("#messageDialog").hide();
-  }
+    jQuery('#messageDialog').modal('show');
+};
 
-function fadeModal(fadeTime) 
-  {
-   console.log("Fading message");
-   setTimeout(function() {
-     jQuery("#messageDialog").hide();
-   }, fadeTime);  
-  }
+function closeModalOld() {
+    jQuery("#messageDialog").modal('hide');
+    //jQuery("#messageDialog").remove();
+}
 
-function updateModal(message) 
-  {
-      console.log("updateModal ==>" + message);
-      var $modal = jQuery("#messageDialog");
-      console.log("updateModal ==>" + $modal.find('span#message'));
-      var $text  = $modal.find('span#message').html(message)
-   //jQuery('span#message').html(message);
-  }
+function fadeModalOld(fadeTime) {
+    // console.log("Fading message");
+    setTimeout(function() {
+        jQuery("#messageDialog").modal('hide');
+    }, fadeTime);
+}
+
+function updateModal(message) {
+    if (jQuery('#messageDialog').is(':hidden')) {
+        jQuery("#messageDialog").modal('show');
+    }
+    jQuery('#message').text(message);
+}
+
+function closeModal() {
+    // Fetch the existing instance of the modal and hide it
+    const modalElement = document.getElementById('messageDialog');
+    const modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+    modalInstance.hide();
+}
+
+function fadeModal(fadeTime) {
+    // Get the modal element by its ID
+    const myModalEl = document.getElementById('messageDialog');
+
+    // Listen for when the modal is fully shown
+    myModalEl.addEventListener('shown.bs.modal', () => {
+
+        // Set a delay timer
+        setTimeout(() => {
+            // Safely fetch or create the Bootstrap modal instance
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(myModalEl);
+
+            // Automatically hide the modal
+            modalInstance.hide();
+        }, fadeTime);
+    });
+
+}
