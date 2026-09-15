@@ -4,8 +4,10 @@
  * Main is a JavaScript library to provide a set of functions to manage
  *  the web requests.
  *
- * version 3.15
- * July 10, 2024
+ * $Id: /var/www/html/puz/javascripts/usgs/main.js, v 3.17 2026/09/14 16:28:07 llorzol Exp $
+ * $Revision: 3.17 $
+ * $Date: 2026/09/14 16:28:07 $
+ * $Author: llorzol $
 */
 
 /*
@@ -38,6 +40,12 @@ jQuery('.noJump a').click(function(event){
    event.preventDefault();
 });
 
+// loglevel
+//
+let myLogger = log.getLogger('myLogger');
+//myLogger.setLevel('debug');
+myLogger.setLevel('info');
+
 // Global variables for map
 //
 var isMobile           = false;
@@ -66,6 +74,7 @@ var myZoomFlag                 = false;
 //
 var frameworkFile      = "puz_configuration.js";
 var studyareaBoundary  = 'gis/extent_dd.json';
+var studyareaBoundary  = 'gis/studyarea.geojson';
 
 var aboutFiles         = null;
 var rasters            = null;
@@ -93,91 +102,82 @@ $(document).ready(function()
    openModal(message);
    //closeModal();
 
-   // Build ajax requests
-   //
-   var webRequests  = [];
+    // Build ajax requests
+    //
+    let urls = [];
 
-   // Request for project information
-   //
-   var request_type = "GET";
-   var script_http  = frameworkFile + "?_="+(new Date()).valueOf();
-   var data_http    = "";
-   var dataType     = "json";
-      
-   // Web request
-   //
-    webRequests.push($.ajax( {
-      method:   request_type,
-      url:      script_http,
-      data:     data_http,
-      dataType: dataType,
-      success: function (myData) {
-        message = "Processed Puz configuration information";
-        openModal(message);
-        fadeModal(2000);
-        
-        processConfigFile(myData);
-      },
-      error: function (error) {
-        message = "Error loading Puz configuration information ";
-        openModal(message);
-        fadeModal(2000);
-        return false;
-      }
-   }));
+    // Insert accordion text
+    //
+    jQuery.each(aboutFiles, function(keyItem, keyFile) {
 
-   // Set studyarea boundary
-   //	
-   console.log("Studyarea boundary " + studyareaBoundary);
-   if(studyareaBoundary)
-     {
-      console.log("Retrieving studyarea boundary " + studyareaBoundary);
-
-      // Request for basin boundary
-      //
-      var request_type = "GET";
-      var script_http  = studyareaBoundary;
-      var data_http    = "";
-      var dataType     = "json";
-      
-      // Web request
-      //
-       webRequests.push($.ajax( {
-         method:   request_type,
-         url:      script_http,
-         data:     data_http,
-         dataType: dataType,
-         success: function (myData) {
-           message = "Processed studyarea boundary information";
-           openModal(message);
-           fadeModal(2000);
-           
-           studtyareaJson = myData;
-         },
-         error: function (error) {
-           message = `Failed to load studyarea boundary information ${error}`;
-           openModal(message);
-           fadeModal(2000);
-           return false;
-         }
-      }));
-     }
-
-   // Run ajax requests
-   //
-   $.when.apply($, webRequests).then(function() {
-
-        fadeModal(2000);
-
-        // Build map
+        // Request for accordion text information
         //
-        buildMap();
-   });
-  });
+        //let Url = `${keyFile} + "?_="+(new Date()).valueOf()`
+        let Url = `${keyFile}`
+
+        // Web request
+        //
+        urls.push(`${Url}`);
+    });
+
+    // Call the async function
+    //
+    webRequests(urls, 'text', processAboutFiles)
+});
+
+// Process about files information
+//
+function processAboutFiles(myInfo) {
+    myLogger.info("processAboutFiles");
+    //myLogger.info(myInfo);
+    
+    jQuery.each(aboutFiles, function(keyItem, keyFile) {
+        jQuery("#" + keyItem).html(myInfo.shift());
+    });
+
+    // Build ajax requests
+    //
+    let urls = [];
+
+    // Web request
+    //
+    if(studyareaBoundary) {
+        urls.push(`${studyareaBoundary}`);
+
+        // Call the async function
+        //
+        webRequests(urls, 'json', processStudyBoundary)
+    }
+}
+
+// Process study boundary information
+//
+function processStudyBoundary(myData) {
+    myLogger.info("processStudyBoundary");
+
+    StudyBoundary = myData[0]
+
+    // Build map
+    //
+    buildMap ()
+}
 
 // Process project configuration information
 //
-function processConfigFile(myInfo) 
+function processConfigFile(myInfo) {
+    myLogger.info("Processing project configuration information");
+    myLogger.debug(myInfo);
+    for (let key in myInfo) {
+        globalThis[key] = myInfo[key]
+    }
+
+    return;
+
+}
+
+// Process project configuration information
+//
+function processConfigFileOld(myInfo) 
   {        
    console.log("Processing project configuration information");
    console.log(myInfo);
