@@ -1,60 +1,23 @@
 <!DOCTYPE html>
+
+<!-- 
+ $Id: /var/www/html/puz/index.html, v 1.08 2026/09/13 09:11:51 llorzol Exp $
+ $Revision: 1.08 $
+ $Date: 2026/09/13 09:11:51 $
+ $Author: llorzol $
+-->
+
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="author" content="By Daniel T. Snyder">
-    <meta name="description" content="Estimated Depth to Groundwater and Configuration of the Water Table in the Portland, Oregon Area">
-    <meta name="keywords" content="Portland, Oregon, water-resource issues, stormwater injection, estimated depth-to-water, water-table elevation">
-    <meta name="abstract" content="Reliable information on the configuration of the water table in the Portland metropolitan area is needed to address concerns about various water-resource issues, especially with regard to potential effects from stormwater injection systems such as UIC (underground injection control) systems that are either existing or planned. To help address these concerns, this report presents the estimated depth-to-water and water-table elevation maps for the Portland area, along with estimates of the relative uncertainty of the maps and seasonal water-table fluctuations.&#xA;The method of analysis used to determine the water-table configuration in the Portland area relied on water-level data from shallow wells and surface-water features that are representative of the water table. However, the largest source of available well data is water-level measurements in reports filed by well constructors at the time of new well installation, but these data frequently were not representative of static water-level conditions. Depth-to-water measurements reported in well-construction records generally were shallower than measurements by the U.S. Geological Survey (USGS) in the same or nearby wells, although many depth-to-water measurements were substantially deeper than USGS measurements. Magnitudes of differences in depth-to-water measurements reported in well records and those measured by the USGS in the same or nearby wells ranged from ?119 to 156 feet with a mean of the absolute value of the differences of 36 feet. One possible cause for the differences is that water levels in many wells reported in well records were not at equilibrium at the time of measurement. As a result, the analysis of the water-table configuration relied on water levels measured during the current study or used in previous USGS investigations in the Portland area. Because of the scarcity of well data in some areas, the locations of select surface-water features including major rivers, streams, lakes, wetlands, and springs representative of where the water table is at land surface were used to augment the analysis.&#xA;Ground-water and surface-water data were combined for use in interpolation of the water-table configuration. Interpolation of the two representations typically used to define water-table position?depth to the water table below land surface and elevation of the water table above a datum?can produce substantially different results and may represent the end members of a spectrum of possible interpolations largely determined by the quantity of recharge and the hydraulic properties of the aquifer. Datasets of depth-to-water and water-table elevation for the current study were interpolated independently based on kriging as the method of interpolation with parameters determined through the use of semivariograms developed individually for each dataset. Resulting interpolations were then combined to create a single, averaged representation of the water-table configuration. Kriging analysis also was used to develop a map of relative uncertainty associated with the values of the water-table position. &#xA;Accuracy of the depth-to-water and water-table elevation maps is dependent on various factors and assumptions pertaining to the data, the method of interpolation, and the hydrogeologic conditions of the surficial aquifers in the study area. Although the water-table configuration maps generally are representative of the conditions in the study area, the actual position of the water-table may differ from the estimated position at site-specific locations, and short-term, seasonal, and long-term variations in the differences also can be expected. The relative uncertainty map addresses some but not all possible errors associated with the analysis of the water-table configuration and does not depict all sources of uncertainty.&#xA;Depth to water greater than 300 feet in the Portland area is limited to parts of the Tualatin Mountains, the foothills of the Cascade Range, and much of the Boring Hills. In addition to the low-lying areas along major rivers and streams, areas of notably shallow depths to water include the area consisting of former alluvial channels extending from the confluence of Johnson and Crystal Springs Creeks northward to the Willamette River and southward to the Clackamas River, much of the area adjacent to Johnson Creek, the area extending from Beggars Tick Marsh eastward to Holgate Lake at the west end of Powell Butte, the area around Fairview Creek, and the west end of Lake Oswego. These regions of shallow depths to water may represent areas of concern with regard to existing or planned stormwater injection systems.&#xA;The surface representing the water-table elevation is similar to land surface; the highest elevations are in the Tualatin Mountains, Boring Hills, and foothills of the Cascade Range, and the lowest elevations are along major rivers and streams and in the terrace deposits in the northern, eastern, and northeastern parts of the city of Portland. Regional ground-water flow is toward the major ground-water discharge areas, consisting of the Columbia, Willamette, and Clackamas Rivers. Locally, shallow ground-water flow direction derived from the water-table elevation map generally is toward adjacent streams and rivers. A notable exception is in the middle and upper parts of the Johnson Creek drainage basin, where much of the shallow groundwater flows toward the Sandy, Columbia, or Willamette Rivers. &#xA;The range of seasonal water-table fluctuations in shallow wells used for analysis with water-level measurements distributed throughout the year ranged from 1 to 22 feet with a mean of 7 feet. Results of the analysis indicated that differences in the spatial distribution of seasonal fluctuations of the water table in the Portland area largely were a function of the effective porosity of the hydrogeologic unit in the range of fluctuation of the water table and, therefore, were categorized by hydrogeologic unit. Small seasonal water-table fluctuations occur throughout the study area but are more heavily concentrated in the terraced areas between the Willamette and Columbia Rivers north and west of the Boring Hills. Seasonal fluctuations generally are largest in the Sandy, Boring, and Damascus areas with few exceptions.">
-    <meta name="publisher" content="USGS - U.S. Geological Survey">
-    <meta name="created" content="20240926">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Estimated Depth to Groundwater and Configuration of the Water Table in the Portland, Oregon Area</title>
 
-    <!-- Ventor css -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700,600">
-    <link rel="stylesheet" href="css/required/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- meta -->
+    <!--#include virtual="includes/meta_inc.html" -->
 
-    <link href="DrupalVisID/stylesheets/common.css" rel="stylesheet" type="text/css" media="screen">
-    <link href="DrupalVisID/stylesheets/custom.css" rel="stylesheet" type="text/css" media="screen">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-         <!-- Google Tag Manager -->
-         <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                                              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-		    })(window,document,'script','dataLayer','GTM-TKQR8KP');         </script>
-         <!-- End Google Tag Manager -->
-
-         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fjalla+One|Oswald|Roboto+Condensed">
-         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
-         <link rel="stylesheet" href="css/required/leaflet.css">
-
-         <link rel="stylesheet" href="css/required/L.Control.Locate.css">
-         <link rel="stylesheet" href="css/required/easy-button.css">
-
-         <!-- Local css -->
-         <link rel="stylesheet" href="css/usgs/popup.css">
-         <link rel="stylesheet" href="css/usgs/modal.css">
-         <link rel="stylesheet" href="css/usgs/map.css">
-         <link rel="stylesheet" href="css/usgs/usgs.css">
-
-         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather">
-
-         <!-- end css -->
+    <!-- css -->
+    <!--#include virtual="DrupalVisID/includes/meta-css.html" -->
+    <!--#include virtual="includes/css_inc.html" -->
+    <!-- end css -->
 
   </head>
 
@@ -68,25 +31,25 @@
       <!-- Page Heading/Breadcrumbs -->
       <div class="row">
         <div class="col-sm-12">
-          <div class="clear title title_top">U.S. Geological Survey</div>
-          <div class="clear title title_1">
-            <a href="https://pubs.usgs.gov/sir/2008/5059/">
-              <div class="clear title title_1">Estimated Depth to Groundwater in the Portland, Oregon Area</div>
+          <div class="fs-2 fw-bold text-black mt-2">U.S. Geological Survey</div>
+          <div class="mt-2">
+            <a class="fs-2 fw-bold text-black text-decoration-none" href="https://pubs.usgs.gov/sir/2008/5059/">
+              <div>Estimated Depth to Groundwater in the Portland, Oregon Area</div>
             </a>
           </div>
-          <div class="clear title title_2">Estimated Depth to Groundwater Mapper</div>
+          <div class="fs-4 fw-bold text-black mt-2">Estimated Depth to Groundwater Mapper</div>
         </div>
       </div>
       <!-- End Page Heading/Breadcrumbs -->
 
       <!-- Accordion -->
-      <div class="row">
+      <div class="row mt-3">
         <div class="col-sm-12">
-          <div class="accordion" id="accordionExample">
+          <div class="accordion " id="accordionExample">
 
-            <div class="accordion-item">
+            <div class="accordion-item border border-dark border-2 rounded shadow mb-2">
               <h2 class="accordion-header" id="heading1">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapseOne">
+                <button class="accordion-button collapsed fw-bold fs-6 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapseOne">
                   Introduction
                 </button>
               </h2>
@@ -97,9 +60,9 @@
               </div>
             </div>
 
-            <div class="accordion-item">
+            <div class="accordion-item border border-dark border-2 rounded shadow mb-2">
               <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button class="accordion-button collapsed fw-bold fs-6 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                   Partners and Cooperators
                 </button>
               </h2>
@@ -110,9 +73,9 @@
               </div>
             </div>
 
-            <div class="accordion-item">
+            <div class="accordion-item border border-dark border-2 rounded shadow mb-2">
               <h2 class="accordion-header" id="headingTwo">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <button class="accordion-button collapsed fw-bold fs-6 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                   Instructions
                 </button>
               </h2>
@@ -123,9 +86,9 @@
               </div>
             </div>
 
-            <div class="accordion-item">
+            <div class="accordion-item border border-dark border-2 rounded shadow mb-2">
               <h2 class="accordion-header" id="headingThree">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                <button class="accordion-button collapsed fw-bold fs-6 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                   Disclaimer
                 </button>
               </h2>
@@ -136,9 +99,9 @@
               </div>
             </div>
 
-            <div class="accordion-item">
+            <div class="accordion-item border border-dark border-2 rounded shadow mb-2">
               <h2 class="accordion-header" id="heading4">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                <button class="accordion-button collapsed fw-bold fs-6 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
                   Contact
                 </button>
               </h2>
@@ -154,7 +117,7 @@
       </div>
 
       <!-- Map -->
-      <div class="row spacemetop">
+      <div class="row  mt-3">
         <div class="col-sm-12">
           <!--map-->
           <div class="body-wrap">
@@ -163,7 +126,7 @@
                 <div class="col-sm-12">
                   <!-- Start Leaflet Map object -->
                   <div id="maps">
-                    <div id="map" class="mapUSA">
+                    <div id="map" class="mapUSA border border-dark border-2 rounded shadow">
                     </div>
                   </div>
                   <!-- End Leaflet Map object -->
@@ -174,56 +137,35 @@
         </div>
       </div><!--end row-->
 
-      <div class="row spacemetop" id="links">
+      <div class="row mt-3 mb-3" id="links">
         <div class="col-sm-12">
-          <table>
-
-            <tr>
-              <th colspan="3">
-                Links to overview maps:
-              </th>
-            </tr>
-
-            <tr>
-              <td>
-                <img src="overview_maps/sir20085059_plate1_thumbnail.jpg" alt="Depth to Water map">
-              </td>
-              <td>
-                <img src="overview_maps/sir20085059_plate2_thumbnail.jpg" alt="Water-Table Elevation map">
-              </td>
-              <td>
-                <img src="overview_maps/sir20085059_plate3_thumbnail.jpg" alt="Uncertainty map">
-              </td>
-            </tr>
-
-            <tr>
-              <td>
-                Depth to Water
-              </td>
-              <td>
-                Water-Table Elevation
-              </td>
-              <td>
-                Uncertainty
-              </td>
-            </tr>
-
-            <tr>
-              <td>
+          <div class="fw-bold fs-5 text-start">Links to overview maps:</div>
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item flex-fill border border-dark border-2 rounded shadow mb-1 me-1">
+              <img src="overview_maps/sir20085059_plate1_thumbnail.jpg" alt="Depth to Water map">
+              <div class="fw-bold fs-6 text-center">Depth to Water</div>
+              <div class="fw-bold fs-6 text-center">
                 <a href="overview_maps/sir20085059_plate1.jpg" target="_blank">Low resolution:</a> 4 MB
                 <a href="overview_maps/sir20085059_plate1.pdf" target="_blank">High resolution:</a> 22 MB
-              </td>
-              <td>
+              </div>
+            </li>
+            <li class="list-group-item flex-fill border border-dark border-2 rounded shadow mb-1 me-1">
+              <img src="overview_maps/sir20085059_plate2_thumbnail.jpg" alt="Water-Table Elevation map">
+              <div class="fw-bold fs-6 text-center">Water-Table Elevation</div>
+              <div class="fw-bold fs-6 text-center">
                 <a href="overview_maps/sir20085059_plate2.jpg" target="_blank">Low resolution:</a> 4 MB
                 <a href="overview_maps/sir20085059_plate2.pdf" target="_blank">High resolution:</a> 25 MB
-              </td>
-              <td>
-                <a href="overview_maps/sir20085059_plate3.jpg" target="_blank">Low resolution:</a> 3 MB
-                <a href="overview_maps/sir20085059_plate3.pdf" target="_blank">High resolution:</a> 23 MB
-              </td>
-            </tr>
-
-          </table>
+              </div>
+            </li>
+            <li class="list-group-item flex-fill border border-dark border-2 rounded shadow mb-1 me-1">
+              <img src="overview_maps/sir20085059_plate3_thumbnail.jpg" alt="Uncertainty map">
+              <div class="fw-bold fs-6 text-center">Uncertainty</div>
+              <div class="fw-bold fs-6 text-center">
+                <a href="overview_maps/sir20085059_plate3.jpg" target="_blank">Low resolution:</a> 4 MB
+                <a href="overview_maps/sir20085059_plate3.pdf" target="_blank">High resolution:</a> 25 MB
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -232,28 +174,27 @@
 
     <!--#include virtual="DrupalVisID/includes/footer_WRET.html"-->
 
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TKQR8KP"
-                      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
-    <!-- Supporting scripts -->
+    <!-- Supporting scripts  -->
     <script src="javascripts/required/jquery.min.js"></script>
-    <script src="javascripts/required/popper.min.js"></script>
-    <script src="javascripts/required/tether.min.js"></script>
     <script src="javascripts/required/bootstrap.bundle.min.js"></script>
-    <script src="javascripts/required/jquery.url.js"></script>
     <script src="javascripts/required/leaflet.min.js"></script>
-    <script src="javascripts/required/L.Control.Locate.min.js"></script>
     <script src="javascripts/required/Control.MiniMap.min.js"></script>
+    
     <!-- For responsive popup -->
     <script src="javascripts/required/leaflet.responsive.popup.js"></script>
     <link rel="stylesheet" href="css/required/leaflet.responsive.popup.css">
 
-    <!-- For control buttons -->
-    <script src="javascripts/required/easy-button.js"></script>
+    <!-- Home feature  -->
     <link rel="stylesheet" href="zoombar/L.Control.ZoomBar.css"/>
     <script type="text/javascript" src="zoombar/L.Control.ZoomBar.js"></script>
+
+    <!-- For remove locations button -->
+    <script src="easy-button/easy-button.js"></script>
+    <link rel="stylesheet" type="text/css" href="easy-button/easy-button.css">
+
+    <!-- Zoom to your location feature  -->
+    <link rel="stylesheet" href="css/required/L.Control.Locate.css">
+    <script src="javascripts/required/L.Control.Locate.min.js"></script>
     
     <!-- Leaflet Geosearch -->
     <script src="leaflet-geosearch/leaflet-geosearch.min.js"></script>
@@ -262,12 +203,23 @@
     <!-- Proj4 scripts -->
     <script src="javascripts/required/proj4js/dist/proj4.js"></script>
 
+    <!-- log4js -->
+    <script src="javascripts/required/loglevel.min.js"></script>
+    
+    <!-- Point in polygon -->
+    <script src="javascripts/required/leaflet-pip.js"></script>
+    
+    <!-- Definitions for Framework -->
+    <script type="module">
+      import myJson from './puz_configuration.json' with { type: 'json' };
+      processConfigFile(myJson)
+    </script>
+
     <!-- Local scripts -->
     <script src="javascripts/usgs/webRequest.js"></script>
     <script src="javascripts/usgs/baseMaps.js"></script>
     <script src="javascripts/usgs/modal.js"></script>
     <script src="javascripts/usgs/map_coordinate.js"></script>
-    <script src="javascripts/usgs/framework_tools.js"></script>
     <script src="javascripts/usgs/popup.js"></script>
     <script src="javascripts/usgs/map.js"></script>
     <script src="javascripts/usgs/main.js"></script>
