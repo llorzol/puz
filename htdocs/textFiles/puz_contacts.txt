@@ -1,0 +1,14 @@
+<!--
+ $Id: /var/www/html/puz/puz_contacts.txt, v 1.01 2026/09/12 20:28:02 llorzol Exp $
+ $Revision: 1.01 $
+ $Date: 2026/09/12 20:28:02 $
+ $Author: llorzol $
+-->
+      <p>
+       <div class="Button">Questions on Estimated Depth to Ground Water and Configuration of the Water Table in the Portland, Oregon Area contact:</div>
+       <div class="MenuItem2"><a href="mailto:GS-W-OR_NWISWeb_GW_Inquiries@usgs.gov">GW specialist email</a></div>
+      </p>
+      <p>
+       <div class="Button">Questions on the web explorer contact:</div>
+       <div class="MenuItem2"><a href="mailto:gs-w-or_www@usgs.gov">web team email</a></div>
+      </p>
