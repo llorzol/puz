@@ -4,9 +4,9 @@
  * Map is a JavaScript library to provide a set of functions to build
  *  a Leaflet Map Site.
  *
- * $Id: /var/www/html/puz/javascripts/usgs/map.js, v 3.11 2026/09/13 09:46:39 llorzol Exp $
- * $Revision: 3.11 $
- * $Date: 2026/09/13 09:46:39 $
+ * $Id: /var/www/html/puz/javascripts/usgs/map.js, v 3.12 2026/09/24 10:49:01 llorzol Exp $
+ * $Revision: 3.12 $
+ * $Date: 2026/09/24 10:49:01 $
  * $Author: llorzol $
 */
 
@@ -41,6 +41,8 @@ var miniMap;
 var boundaryLayer;
 var zoomArea         = false;
 var radius           = 3;
+var maxZoom          = 15;
+var mapPadding       = 0.15
 
 // Create marker and raster cell layers
 //
@@ -67,7 +69,7 @@ function buildMap() {
 
     // Create the map object
     //
-    map = new L.map('map', { scrollWheelZoom: false, zoomControl: false});
+    map = new L.map('map', { scrollWheelZoom: false, zoomControl: false, maxZoom: maxZoom});
 
     // Scroll message
     //
@@ -104,11 +106,27 @@ function buildMap() {
     // Set the bounds
     //
     map.fitBounds(boundaryLayer.getBounds());
-    myLogger.info(boundaryLayer.getBounds());
 
+    // Map bounds for zoom to location and geocoding tools
+    //
+    const bounds = map.getBounds();
+    myLogger.info(bounds);
+    map.setMaxBounds(bounds);
+
+    // Increase the bounds by 10% (0.10) padding
+    //
+    let paddedBounds = bounds.pad(mapPadding);
+
+    // Apply the new expanded bounds to the map
+    //
+    map.setMaxBounds(paddedBounds);
+
+    const sw = bounds.getSouthWest();
+    const ne = bounds.getNorthEast();
+    
     // Set maximum bounds
     //
-    map.setMaxBounds(boundaryLayer.getBounds());
+    //map.setMaxBounds(boundaryLayer.getBounds());
 
     // Add base map
     //
@@ -134,10 +152,12 @@ function buildMap() {
     // Add home button
     //
     let zoom_bar = new L.Control.ZoomBar({position: 'topleft'}).addTo(map);
+    $(".leaflet-control-container").css("z-index", 600);
 
     // Clicked zoom home
     //
     $(".leaflet-control-zoom-to-start").on("click", (e) => {
+        myLogger.info(`leaflet-control-zoom-to-start`);
 
         // Set marker or cell on map
         //
@@ -147,6 +167,7 @@ function buildMap() {
     // Clicked zoom home
     //
     $(".leaflet-control-zoom-to-area").on("click", (e) => {
+        myLogger.info(`leaflet-control-zoom-to-area`);
 
         zoomArea = true;
         myLogger.info(`zoomArea ${zoomArea}`);
@@ -156,26 +177,35 @@ function buildMap() {
         setMarkerOrCell()
     });
 
-  // Add raster layers
-  //
-  //L.tileLayer('lsd_tiles/{z}/{x}/{y}.png').addTo(map);
-  //L.tileLayer('lsd_tiles/{z}/{y}/{x}.png').addTo(map);
-  //L.tileLayer('lsd_tiles/9/80/329.png').addTo(map);
-	  
-  //L.control.scale().addTo(map);
+    // Add raster layers
+    //
+    //L.tileLayer('lsd_tiles/{z}/{x}/{y}.png').addTo(map);
+    //L.tileLayer('lsd_tiles/{z}/{y}/{x}.png').addTo(map);
+    //L.tileLayer('lsd_tiles/9/80/329.png').addTo(map);
 
-  // Add zoom to your location
-  //
-  var myLocate = L.control.locate({
-      drawCircle: false,
-      drawMarker: false,
-      clickBehavior: { outOfView: 'stop' },
-      strings: { title: "Move and zoom to your location" }
-  }).addTo(map);
+    //L.control.scale().addTo(map);
+
+    // Add zoom to your location
+    //
+    let myLocate = L.control.locate({
+        drawCircle: false,
+        drawMarker: false,
+        returnToPrevBounds: true,
+        clickBehavior: { outOfView: 'stop' },
+        onLocationOutsideMapBounds: function(context) { // called when outside map boundaries
+            message = context.options.strings.outsideMapBoundsMsg;
+            openModal(message);
+            console.log(message);
+        },
+        strings: {
+            title: "Move and zoom to your location",
+            outsideMapBoundsMsg: "You seem located outside the boundaries of the map"
+        }
+    }).addTo(map);
 
     // Remove locations tool
     //
-    var removeLocationTool = L.easyButton({
+    let removeLocationTool = L.easyButton({
         id: 'removeLocationTool',
         states: [{
             icon: '<img src="easy-button/trash.svg" class="img-fluid">',
@@ -186,40 +216,52 @@ function buildMap() {
         }]
     }).addTo(map);
 
-    // Map bounds for geocoding tool
+    // Create the geocoding control and add it to the map
     //
-    let map_bounds = map.getBounds();
-    var southWest = map_bounds.getSouthWest(); // LatLng object
-    var northEast = map_bounds.getNorthEast(); // LatLng object
-
-    const corner1 = L.latLng(northEast.lat, southWest.lng);
-    const corner2 = L.latLng(southWest.lat, northEast.lng);
-    const bounds  = L.latLngBounds(corner1, corner2);
-
-  // Create the geocoding control and add it to the map
-  //
-    var searchControl = new GeoSearch.GeoSearchControl({
-      provider: new GeoSearch.OpenStreetMapProvider(),
-      showMarker: false,
-      autoClose: true, 
-      searchLabel: "Enter address or latitude/longitude"
+    let searchControl = new GeoSearch.GeoSearchControl({
+        provider: new GeoSearch.OpenStreetMapProvider({params: {viewbox: `${sw.lng},${sw.lat},${ne.lng},${ne.lat}`, bounded: 1},}),
+        showMarker: false,
+        autoClose: true,
+        searchLabel: "Enter address or latitude/longitude"
     })
     map.addControl(searchControl);
     $(".leaflet-control-geosearch form input").css('min-width', '400px');
     $(".leaflet-control-geosearch form button").remove();
     $(".leaflet-control-geosearch a").html('');
-    $(".leaflet-control-geosearch a").html('<img src="css/icons/search.png" class="searchPng">')
+    //$(".leaflet-control-geosearch a").html('<img src="css/icons/search.png" class="searchPng">')
+    $(".leaflet-control-geosearch a").html('<img src="leaflet-geosearch/search.svg" class="searchPng">')
     //$(".leaflet-control-geosearch a").html('<i class="fa-solid fa-magnifying-glass"></i>')
     $(".leaflet-control-geosearch a").css('font-size', '2.5rem');
 
-  map.on('geosearch/showlocation', function(data) {
-      myLogger.info("geocoding results ",data);
-  			
-      if('location' in data)
-        {
-          var myAddress = { latlng: { lng: data.location.x,  lat: data.location.y } };
+    map.on('geosearch/showlocation', function(data) {
+        myLogger.info("geocoding results ", data);
 
-          onMapClick(markerLayer, rasterLayer, myAddress);
+        if('location' in data) {
+            let myAddress = { latlng: { lng: data.location.x,  lat: data.location.y } };
+
+            // Point inside model grid
+            //
+            if(isPointInPoly(boundaryLayer, [data.location.x, data.location.y])) {
+                myLogger.info("geocoding results ", isPointInPoly(boundaryLayer, [data.location.x, data.location.y]));
+
+                onMapClick(markerLayer, rasterLayer, myAddress);
+            }
+
+            // Point outside model grid
+            //
+            else {
+                openModal("Address is located outside the boundaries of the study");
+                fadeModal(5000);
+                return;
+            }
+        }
+
+        // Invalid address
+        //
+        else {
+            openModal("Invalid address or latitude/longitude");
+            fadeModal(5000);
+            return;
         }
   });
 
@@ -235,11 +277,9 @@ function buildMap() {
   // Generate point location
   //
     map.on('click', function(evt) {
-      myLogger.info(`zoomArea ${zoomArea}`);
+      myLogger.info(`Map clicked zoomArea ${zoomArea}`);
       if(zoomArea) { zoomArea = false; }
-      else {
-        onMapClick(markerLayer, rasterLayer, evt);
-      }
+      else { onMapClick(markerLayer, rasterLayer, evt); }
    });
 
   // Remove point location(s)
@@ -258,71 +298,6 @@ function buildMap() {
   jQuery(".leaflet-control").css("z-index", "600");
   jQuery(".leaflet-popup").css("z-index", "650");
 
-  }
-
-   
-// Parse information from file
-//
-function setMap(json_data) 
-  {
-    raster_coordinates         = json_data.raster_coordinates;
-    raster_projection          = json_data.raster_projection;
-    latlong_projection         = json_data.latlong_projection;
-    zoom_level                 = json_data.zoom_level;
-
-    var latlong_max_x          = -99999999999999.99;
-    var latlong_max_y          = -99999999999999.99;
-    var latlong_min_x          =  99999999999999.99;
-    var latlong_min_y          =  99999999999999.99;
-
-    var raster_max_x           = -99999999999999.99;
-    var raster_max_y           = -99999999999999.99;
-    var raster_min_x           =  99999999999999.99;
-    var raster_min_y           =  99999999999999.99;
-
-    // Set corners 
-    // 
-    for (var corner in raster_coordinates)
-	{
-	  var raster_corner       = { "x": raster_coordinates[corner].x, "y": raster_coordinates[corner].y };
-          var latlong_coordinate  = User2User(
-					      raster_corner,
-                                              raster_projection,
-                                              latlong_projection
-                                             );
-      
-          if(raster_corner.x > raster_max_x) { raster_max_x = raster_corner.x; }
-          if(raster_corner.x < raster_min_x) { raster_min_x = raster_corner.x; }
-          if(raster_corner.y > raster_max_y) { raster_max_y = raster_corner.y; }
-          if(raster_corner.y < raster_min_y) { raster_min_y = raster_corner.y; }
-      
-          if(latlong_coordinate.x > latlong_max_x) { latlong_max_x = latlong_coordinate.x; }
-          if(latlong_coordinate.x < latlong_min_x) { latlong_min_x = latlong_coordinate.x; }
-          if(latlong_coordinate.y > latlong_max_y) { latlong_max_y = latlong_coordinate.y; }
-          if(latlong_coordinate.y < latlong_min_y) { latlong_min_y = latlong_coordinate.y; }
-      
-          //raster_polygon.push({ "x" : latlong_coordinate.x, "y" : latlong_coordinate.y });
-          raster_polygon.push({ "x" : raster_corner.x, "y" : raster_corner.y });
-	}
-    return { "min_x": latlong_min_x, "min_y": latlong_min_y, "max_x": latlong_max_x, "max_y": latlong_max_y };
-  }
-
-
-function updateLegend(v, currentMap, updateType) {
-
-    //jQuery("#overlayMenu.sw").append('<li role="presentation" id="' + curSiteTypeInfo.overlayLayerName + '" class="' + curSiteTypeInfo.overlayLayerName  + '"><a role="menuitem" tabindex="-1"><div name="overlayLayers" ><img src="' + curSiteTypeInfo.singleMarkerURL + '"/><span>' + curSiteTypeInfo.legendLayerName + '</span></div></li>');}
-
-}
-
-// Determine if a point is within raster
-//
-function isPointInPolyOld(poly, pt)
-  {
-    for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
-	((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
-	&& (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
-	&& (c = !c);
-    return c;
   }
  
 // Determine if a point is within Model grid
@@ -376,20 +351,11 @@ function onMapClick(markerLayer, rasterLayer, evt) {
       //
       else
         { 
-         var message = "Point is located outside the boundaries of the study";
-         openModal(message);
+         openModal("Point is located outside the boundaries of the study");
          fadeModal(5000);
          return;
         }
     }
-}
-
-function outsideStudyArea() { 
-    myLogger.info("Point is located outside the boundaries of the study");
-         var message = "Point is located outside the boundaries of the study";
-         openModal(message);
-         fadeModal(5000);
-         return;
 }
 
 function resetPoints(markerLayer, rasterLayer)
